@@ -1,34 +1,34 @@
-apply plugin: 'android-library'
+apply plugin: 'java'
 
 repositories {
 	mavenCentral()
 }
 
-android {
-	compileSdkVersion 19
-	buildToolsVersion "19.0.1"
-
-	defaultConfig {
-		minSdkVersion 8
-		targetSdkVersion 19
-		versionCode 1
-		versionName "1.0"
-	}
-	release {
-		runProguard false
-		proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-	}
-}
-
 apply plugin: 'maven'
 
 group = 'com.iainconnor'
-version = '0.0.17-SNAPSHOT'
+version = '2.0.0-SNAPSHOT'
 project.ext.description = "A simple cache for your objects."
 
 dependencies {
 	compile 'com.google.code.gson:gson:2.2.4'
 	compile 'com.jakewharton:disklrucache:2.0.2'
+	compile 'com.netflix.rxjava:rxjava-android:0.19.6'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }
 
 uploadArchives {
@@ -41,5 +41,7 @@ uploadArchives {
 			repository url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
 			repository url: 'file://' + new File("./maven").absolutePath
 		}
+
+
 	}
 }
